@@ -2,13 +2,13 @@
 
 #let draw-orbit(radius, electrons, color: luma(90%), point: (0, 0)) = {
   import cetz.draw: *
-      
+
   circle(point, radius: radius, fill: none)
 
   set-style(content: (padding: .2),
       fill: color,
       stroke: black)
-  
+
   for i in range(electrons) {
     circle(((radius*calc.sin(360deg/electrons*i) + point.at(0)), (radius*calc.cos(360deg/electrons*i) + point.at(1))), radius: 0.13)
     content((), "-")
@@ -26,24 +26,24 @@
   set-style(content: (padding: .2),
       fill: color,
       stroke: black)
-  
+
   circle(point, radius: radius)
   content((),$""_atomic^(mass)atom$,)
 }
 
 #let draw-atom(atomic, mass, atom, electrons, orbitals: 1.0, step: 0.4, center: 0.6, color: luma(90%), point: (0, 0)) = {
-                  
+
   import cetz.draw: *
 
   if type(electrons) == array {
 
     let loop = 0
-    
+
     for i in electrons {
       draw-orbit((orbitals + loop*step), i, color: color, point: point)
       loop = loop + 1
     }
-  
+
     draw-center(atomic, mass, atom, radius: center, color: color, point: point)
 
   }
@@ -93,5 +93,5 @@
     center: center, color: color, point: point)
   })
   }
-    
+
 }
