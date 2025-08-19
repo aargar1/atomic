@@ -12,7 +12,7 @@ To draw a simple atom use
 #atom(atomic number (proton count), mass number (neutron count), electrons per shell, shells: 1.0, step: 0.4, center: 0.6, color: luma(90%))
 ```
 
-The electrons should be passed in an array where the index corresponds to the shell, while the value is the amount of electrons on that shell. Here is an example: 
+The electrons should be passed in an array where the index corresponds to the shell, while the value is the amount of electrons on that shell. Here is an example:
 ```typst
 #atom(29,64, "Cu", (1, 8, 18, 2))
 ```
