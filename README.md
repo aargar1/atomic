@@ -23,6 +23,11 @@ You can also auto-populate orbitals.
 ```typst
 #atom(29,64,"Cu",29)
 ```
+You can highlight the `N` last valence electrons with `valence-color` color using
+
+```typst
+#atom(29,64,"Cu",29, valence: 11, valence-color: red)
+```
 
 To draw the same in a CeTZ canvas, use ```draw-atom```, which takes the same arguments as ```atom```
 
