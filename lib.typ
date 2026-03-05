@@ -1,18 +1,26 @@
-#import "@preview/cetz:0.3.2"
+#import "@preview/cetz:0.4.0"
 
-#let draw-orbit(radius, electrons, color: luma(90%), point: (0, 0)) = {
+#let draw-orbit(radius, electrons, etotal, ewritten, color: luma(90%), point: (0, 0), valence: 0, valence-color: red) = {
   import cetz.draw: *
-
-  circle(point, radius: radius, fill: none)
 
   set-style(content: (padding: .2),
       fill: color,
       stroke: black)
 
+  circle(point, radius: radius, fill: none)
+
   for i in range(electrons) {
+    if valence > 0 and (etotal - ewritten - (i+1) < valence) {
+      set-style(stroke: valence-color)
+    } else {
+      set-style(stroke: black)
+    }
+
     circle(((radius*calc.sin(360deg/electrons*i) + point.at(0)), (radius*calc.cos(360deg/electrons*i) + point.at(1))), radius: 0.13)
     content((), "-")
   }
+
+  set-style(stroke: black)
 }
 
 #let draw-center(atomic, mass, atom, radius: 0.6, color: luma(90%), point: (0, 0)) = {
@@ -31,17 +39,21 @@
   content((),$""_atomic^(mass)atom$,)
 }
 
-#let draw-atom(atomic, mass, atom, electrons, orbitals: 1.0, step: 0.4, center: 0.6, color: luma(90%), point: (0, 0)) = {
+#let draw-atom(atomic, mass, atom, electrons, orbitals: 1.0, step: 0.4, center: 0.6, color: luma(90%), point: (0, 0), valence: 0) = {
 
   import cetz.draw: *
 
   if type(electrons) == array {
 
     let loop = 0
+    let electrons_total = electrons.sum()
+    let electrons_written = 0
+    let show_valence = false
 
     for i in electrons {
-      draw-orbit((orbitals + loop*step), i, color: color, point: point)
+      draw-orbit((orbitals + loop*step), i, electrons_total, electrons_written, color: color, point: point, valence: valence)
       loop = loop + 1
+      electrons_written = electrons_written + i
     }
 
     draw-center(atomic, mass, atom, radius: center, color: color, point: point)
@@ -61,11 +73,11 @@
       }
     }
 
-    draw-atom(atomic, mass, atom, rounds, orbitals: orbitals, step: step, center: center, color: color, point: point)
+    draw-atom(atomic, mass, atom, rounds, orbitals: orbitals, step: step, center: center, color: color, point: point, valence: valence)
   }
 }
 
-#let atom(atomic, mass, atom, electrons, orbitals: 1.0, step: 0.4, center: 0.6, color: luma(90%), point: (0, 0)) = {
+#let atom(atomic, mass, atom, electrons, orbitals: 1.0, step: 0.4, center: 0.6, color: luma(90%), point: (0, 0), valence: 0) = {
 
   if type(electrons) == int or type(electrons) == float {
     cetz.canvas({
@@ -82,7 +94,7 @@
       }
     }
 
-    draw-atom(atomic, mass, atom, rounds, orbitals: orbitals, step: step, center: center, color: color, point: point)
+    draw-atom(atomic, mass, atom, rounds, orbitals: orbitals, step: step, center: center, color: color, point: point, valence: valence)
   })
   }
 
@@ -90,7 +102,7 @@
     cetz.canvas({
     import cetz.draw: *
     draw-atom(atomic, mass, atom, electrons, orbitals: orbitals, step: step,
-    center: center, color: color, point: point)
+    center: center, color: color, point: point, valence: valence)
   })
   }
 
