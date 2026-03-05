@@ -1,4 +1,4 @@
-#import "@preview/cetz:0.4.0"
+#import "@preview/cetz:0.4.1"
 
 #let draw-orbit(radius, electrons, etotal, ewritten, color: luma(90%), point: (0, 0), valence: 0, valence-color: red) = {
   import cetz.draw: *
@@ -105,5 +105,5 @@
     center: center, color: color, point: point, valence: valence)
   })
   }
-
+    
 }
